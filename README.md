@@ -6,7 +6,12 @@ Copy `src/config.json.tpl` and rename it to `config.json`. Set it with the corre
 
 ## Run
 
-You can run the server with
+Before running the bot, deploy the commands to make sure they are accessible in the channel when the bot will be.
+```
+npm run deploy-commands
+```
+
+Then, you can run the server with
 ```
 npm start
 ```
