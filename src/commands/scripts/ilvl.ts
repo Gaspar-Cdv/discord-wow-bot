@@ -1,5 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js'
-import { blizzardAPIService } from '../service/blizzardAPI'
+import { blizzardAPIService } from '../../services/blizzardAPI'
 
 const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const realm = interaction.options.getSubcommand(true)
