@@ -23,7 +23,10 @@ class BlizzardAPIService {
 	private ACCESS_TOKEN_URL = 'https://oauth.battle.net/token'
 	private API_BASE_URL = 'https://eu.api.blizzard.com'
 
-	getCharacter = async <T = CharacterAPIResponse>(realm: string, character: string, subPath?: string): Promise<T | undefined> => {
+	private accessToken?: Promise<string>
+	private tokenExpirationTime?: number
+
+	getCharacter = async <T = CharacterAPIResponse> (realm: string, character: string, subPath?: string): Promise<T | undefined> => {
 		let url = `profile/wow/character/${realm.toLowerCase()}/${character.toLowerCase()}`
 		if (subPath != null) {
 			url += `/${subPath}`
@@ -62,17 +65,17 @@ class BlizzardAPIService {
 	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {
 		const url = new URL(path, this.API_BASE_URL)
 		url.searchParams.append('locale', 'fr_FR')
-	
+
 		try {
 			const accessToken = await this.getAccessToken()
-	
+
 			const { data } = await axios.get<T>(url.toString(), {
 				headers: {
 					'Authorization': `Bearer ${accessToken}`,
-					'Battlenet-Namespace' : namespace
+					'Battlenet-Namespace': namespace
 				}
 			})
-	
+
 			return data
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -85,24 +88,43 @@ class BlizzardAPIService {
 	}
 
 	private getAccessToken = async () => {
-		const body = new FormData()
-		body.append('grant_type', 'client_credentials')
-	
-		try {
-			const { data } = await axios.post<OAuthData>(this.ACCESS_TOKEN_URL, body, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					'Authorization': `Basic ${Buffer.from(config.blizzard.clientId + ':' + config.blizzard.secret).toString('base64')}`
+		if (this.shouldRegenerateToken()) {
+			console.info(`Blizzard access token is not set or has expired. Fetching ${this.ACCESS_TOKEN_URL}...`)
+
+			const body = new FormData()
+			body.append('grant_type', 'client_credentials')
+
+			this.accessToken = new Promise(async (resolve, reject) => {
+				try {
+					const { data } = await axios.post<OAuthData>(this.ACCESS_TOKEN_URL, body, {
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							'Authorization': `Basic ${Buffer.from(config.blizzard.clientId + ':' + config.blizzard.secret).toString('base64')}`
+						}
+					})
+
+					this.tokenExpirationTime = Date.now() + data.expires_in * 1000
+
+					console.info('Blizzard access token was successfully generated.')
+
+					resolve(data.access_token)
+				} catch (error) {
+					if (error instanceof AxiosError) {
+						console.error(`Error while fetching blizzard API at ${this.ACCESS_TOKEN_URL} (${error.message})`)
+						reject()
+					}
+
+					throw error
 				}
 			})
-	
-			return data.access_token
-		} catch (e) {
-			console.error(e)
-			return null
 		}
+
+		return this.accessToken
 	}
 
+	private shouldRegenerateToken = () => {
+		return this.accessToken == null || (this.tokenExpirationTime != null && this.tokenExpirationTime <= Date.now())
+	}
 }
 
 export const blizzardAPIService = new BlizzardAPIService()
