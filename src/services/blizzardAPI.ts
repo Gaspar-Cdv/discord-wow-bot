@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import FormData from 'form-data'
-import config from '../config.json'
+import config from '../config/config.json'
 import { CharacterAchievementsAPIResponse } from '../types/blizzard/character/achievements'
 import { CharacterAchievementsStatisticsAPIResponse } from '../types/blizzard/character/achievementsStatistics'
 import { CharacterAPIResponse } from '../types/blizzard/character/character'

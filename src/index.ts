@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction, Client, GatewayIntentBits } from 'discord.js'
 import commands from './commands/commands'
-import config from './config.json'
+import config from './config/config.json'
 
 const discord = new Client({
 	intents: [GatewayIntentBits.Guilds]
