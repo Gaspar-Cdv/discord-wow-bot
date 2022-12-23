@@ -6,10 +6,12 @@ const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const characterName = interaction.options.getString('character', true)
 	const character = await blizzardAPIService.getCharacter(realm, characterName)
 
+	console.log(interaction.options)
+
 	if (character != null) {
 		await interaction.reply(`ilvl for ${characterName} : ${character.equipped_item_level}`)
 	} else {
-		await interaction.reply(`${characterName} was not fount in ${realm}`)
+		await interaction.reply(`${characterName} was not found in ${realm}`)
 	}
 }
 
