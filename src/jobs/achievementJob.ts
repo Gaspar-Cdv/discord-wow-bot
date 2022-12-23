@@ -24,3 +24,5 @@ export class AchievementJob extends TextChannelJob {
 		}))
 	}
 }
+
+export const achievementJob = new AchievementJob()

@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 import commands from './commands/commands'
 import config from './config/config.json'
-import { AchievementJob } from './jobs/achievementJob'
+import { achievementJob } from './jobs/achievementJob'
 
 const discord = new Client({
 	intents: [GatewayIntentBits.Guilds]
@@ -10,8 +10,7 @@ const discord = new Client({
 discord.on('ready', client => {
 	console.info(`Logged in as ${client.user.username}.`)
 
-	const achievementJob = new AchievementJob(client)
-	achievementJob.start()
+	achievementJob.start(client)
 })
 
 discord.on('interactionCreate', async interaction => {

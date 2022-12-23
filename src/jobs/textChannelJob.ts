@@ -2,17 +2,12 @@ import { ChannelType, Client, TextChannel } from 'discord.js'
 import config from '../config/config.json'
 
 export abstract class TextChannelJob {
-	private client: Client<true>
 	protected abstract callback: (channels: TextChannel[]) => void
 	protected abstract interval: number
 
-	constructor (client: Client<true>) {
-		this.client = client
-	}
-
-	start = async () => {
+	start = async (client: Client<true>) => {
 		const channels = config.discord.channelsId.map(channelId => {
-			const channel = this.client.channels.cache.get(channelId)
+			const channel = client.channels.cache.get(channelId)
 
 			if (channel == null || channel.type !== ChannelType.GuildText) {
 				console.warn(`AchievementJob: channel ${channelId} is not found or is not a text channel.`)
@@ -26,8 +21,8 @@ export abstract class TextChannelJob {
 			return
 		}
 
-		setInterval(() => this.callback(channels), this.interval)
-
 		console.info(`${this.constructor.name} was successfully started.`)
+
+		setInterval(() => this.callback(channels), this.interval)
 	}
 }
