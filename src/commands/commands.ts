@@ -22,7 +22,7 @@ const commands: Command[] = [
 			options: [
 				{
 					name: 'dalaran',
-					description: 'Dalaran realm',
+					description: 'Get the ilvl of a character in Dalaran realm',
 					type: ApplicationCommandOptionType.Subcommand,
 					options: [
 						{
@@ -34,7 +34,7 @@ const commands: Command[] = [
 				},
 				{
 					name: 'varimathras',
-					description: 'Varimathras realm',
+					description: 'Get the ilvl of a character in Varimathras realm',
 					type: ApplicationCommandOptionType.Subcommand,
 					options: [
 						{
