@@ -1,4 +1,10 @@
 {
-	"CLIENT_ID": "",
-	"BOT_TOKEN": ""
+	"discord": {
+		"clientId": "",
+		"token": ""
+	},
+	"blizzard": {
+		"clientId": "",
+		"secret": ""
+	}
 }

@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction, Client, GatewayIntentBits } from 'discord.js'
 import commands from './commands/commands'
-import { BOT_TOKEN } from './config.json'
+import config from './config.json'
 
 const discord = new Client({
 	intents: [GatewayIntentBits.Guilds]
@@ -29,4 +29,4 @@ discord.on('interactionCreate', async interaction => {
 	await execute(interaction)
 })
 
-discord.login(BOT_TOKEN)
+discord.login(config.discord.token)
