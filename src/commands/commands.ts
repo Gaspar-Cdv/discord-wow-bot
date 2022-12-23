@@ -1,4 +1,4 @@
-import { CacheType, ChatInputCommandInteraction, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js'
+import ping from './scripts/ping'
 
 interface Command {
 	data: RESTPostAPIChatInputApplicationCommandsJSONBody
@@ -11,9 +11,7 @@ const commands: Command[] = [
 			name: 'ping',
 			description: 'Respond with pong',
 		},
-		execute: async (interaction) => {
-			await interaction.reply('Pong')
-		}
+		execute: ping
 	}
 ]
 
