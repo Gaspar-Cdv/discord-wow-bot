@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import FormData from 'form-data'
 import config from '../config.json'
 import { CharacterAchievementsAPIResponse } from '../types/blizzard/character/achievements'
@@ -23,7 +23,7 @@ class BlizzardAPIService {
 	private ACCESS_TOKEN_URL = 'https://oauth.battle.net/token'
 	private API_BASE_URL = 'https://eu.api.blizzard.com'
 
-	getCharacter = async <T = CharacterAPIResponse>(realm: string, character: string, subPath?: string): Promise<T> => {
+	getCharacter = async <T = CharacterAPIResponse>(realm: string, character: string, subPath?: string): Promise<T | undefined> => {
 		let url = `profile/wow/character/${realm.toLowerCase()}/${character.toLowerCase()}`
 		if (subPath != null) {
 			url += `/${subPath}`
@@ -31,35 +31,35 @@ class BlizzardAPIService {
 		return this.fetchBlizzardApi<T>(url)
 	}
 
-	getEquipment = async (realm: string, character: string): Promise<CharacterEquipmentAPIResponse> => {
+	getEquipment = async (realm: string, character: string): Promise<CharacterEquipmentAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'equipment')
 	}
 
-	getAchievements = async (realm: string, character: string): Promise<CharacterAchievementsAPIResponse> => {
+	getAchievements = async (realm: string, character: string): Promise<CharacterAchievementsAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'achievements')
 	}
 
-	getAchievementsStatistics = async (realm: string, character: string): Promise<CharacterAchievementsStatisticsAPIResponse> => {
+	getAchievementsStatistics = async (realm: string, character: string): Promise<CharacterAchievementsStatisticsAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'achievements/statistics')
 	}
 
-	getQuests = async (realm: string, character: string): Promise<CharacterQuestsAPIResponse> => {
+	getQuests = async (realm: string, character: string): Promise<CharacterQuestsAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'quests')
 	}
 
-	getQuestsCompleted = async (realm: string, character: string): Promise<CharacterQuestsCompletedAPIResponse> => {
+	getQuestsCompleted = async (realm: string, character: string): Promise<CharacterQuestsCompletedAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'quests/completed')
 	}
 
-	getStatistics = async (realm: string, character: string): Promise<CharacterStatisticsAPIResponse> => {
+	getStatistics = async (realm: string, character: string): Promise<CharacterStatisticsAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'statistics')
 	}
 
-	getStatus = async (realm: string, character: string): Promise<CharacterStatusAPIResponse> => {
+	getStatus = async (realm: string, character: string): Promise<CharacterStatusAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'status')
 	}
 
-	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T> => {
+	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {
 		const url = new URL(path, this.API_BASE_URL)
 		url.searchParams.append('locale', 'fr_FR')
 	
@@ -75,7 +75,11 @@ class BlizzardAPIService {
 	
 			return data
 		} catch (error) {
-			console.error(error)
+			if (error instanceof AxiosError) {
+				console.error(`Error while fetching blizzard API at ${url.toString()} (${error.message})`)
+				return
+			}
+
 			throw error
 		}
 	}
