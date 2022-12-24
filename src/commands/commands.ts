@@ -1,6 +1,7 @@
 import { CacheType, ChatInputCommandInteraction, RESTPostAPIChatInputApplicationCommandsJSONBody, ApplicationCommandOptionType } from 'discord.js'
 import ping from './scripts/ping'
 import ilvl from './scripts/ilvl'
+import quests from './scripts/quests'
 
 interface Command {
 	data: RESTPostAPIChatInputApplicationCommandsJSONBody
@@ -14,6 +15,13 @@ const commands: Command[] = [
 			description: 'Respond with pong',
 		},
 		execute: ping
+	},
+	{
+		data: {
+			name: 'quests',
+			description: 'List all the quests of all characters'
+		},
+		execute: quests
 	},
 	{
 		data: {
