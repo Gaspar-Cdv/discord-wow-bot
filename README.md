@@ -37,3 +37,7 @@ Use `/quests` to display all quests in common of all characters specified in `ch
 ### AchievementJob
 
 Every 10 seconds, this job gets the achievement list of all characters specified in `characters.json` and displays a message in all channels specified in `config.json`
+
+### DurabilityJob
+
+Every minutes, this job finds all broken equipped items (or broken soon) of all characters specified in `characters.json` and displays a warning message in all channels specified in `config.json`
