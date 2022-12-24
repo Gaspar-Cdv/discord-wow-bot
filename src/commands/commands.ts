@@ -28,7 +28,8 @@ const commands: Command[] = [
 						{
 							name: 'character',
 							description: 'The name of the character',
-							type: ApplicationCommandOptionType.String
+							type: ApplicationCommandOptionType.String,
+							required: true
 						}
 					]
 				},
@@ -40,7 +41,8 @@ const commands: Command[] = [
 						{
 							name: 'character',
 							description: 'The name of the character',
-							type: ApplicationCommandOptionType.String
+							type: ApplicationCommandOptionType.String,
+							required: true
 						}
 					]
 				}
