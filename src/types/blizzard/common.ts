@@ -37,14 +37,14 @@ export type LocaleNames = {
 	[key in Locale]: string
 }
 
-export type ValuableDisplayable = Valuable & Displayable
+export type ValuableDisplayable<T extends string | LocaleNames> = Valuable & Displayable<T>
 
 export interface Valuable {
 	value: number
 }
 
-export interface Displayable {
-	display_string: LocaleNames
+export interface Displayable<T extends string | LocaleNames> {
+	display_string: T
 }
 
 export type Currency = 'gold' | 'silver' | 'copper'
