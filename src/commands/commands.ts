@@ -29,6 +29,11 @@ const commands: Command[] = [
 			description: 'Get the ilvl of a character',
 			options: [
 				{
+					name: 'all',
+					description: 'Find the ilvl of all characters',
+					type: ApplicationCommandOptionType.Subcommand
+				},
+				{
 					name: 'dalaran',
 					description: 'Get the ilvl of a character in Dalaran realm',
 					type: ApplicationCommandOptionType.Subcommand,
