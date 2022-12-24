@@ -42,7 +42,11 @@ export class DurabilityJob extends TextChannelJob {
 			})
 
 			await Promise.all(brokenItems.map(async (item) => {
-				this.sendToAllChannels(`Be careful ${item.characterName}, your "${item.itemName} is broken soon (${item.current}/${item.max})!"`)
+				if (item.current === 0) {
+					this.sendToAllChannels(`Alert ${item.characterName}, your "${item.itemName} is broken!`)
+				} else {
+					this.sendToAllChannels(`Be careful ${item.characterName}, your "${item.itemName} is broken soon (${item.current}/${item.max})."`)
+				}
 			}))
 		}))
 	}
