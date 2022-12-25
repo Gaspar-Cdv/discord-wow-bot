@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
-import allCharacters from '../../config/characters.json'
+import { getCharacters } from '../commands'
 
 interface Character {
 	name: string
@@ -16,14 +16,7 @@ const byIlvlDesc = (a: Character, b: Character): number => {
 }
 
 const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
-	const subCommand = interaction.options.getSubcommand(true) // can be a realm or 'all'
-
-	const characters: Character[] = subCommand === 'all'
-		? allCharacters
-		: [{
-			name: interaction.options.getString('character', true),
-			realm: subCommand
-		}]
+	const characters: Character[] = getCharacters(interaction)
 
 	await Promise.all(characters.map(async (character) => {
 		const response = await blizzardAPIService.getCharacter(character.realm, character.name)
