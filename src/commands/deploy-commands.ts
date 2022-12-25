@@ -1,20 +1,23 @@
 import { REST, Routes } from 'discord.js'
-import { BOT_TOKEN, CLIENT_ID } from '../config.json'
+import config from '../config/config.json'
+import { logger } from '../services/logger'
 import commands from './commands'
 
-const rest = new REST({ version: '10' }).setToken(BOT_TOKEN);
+const rest = new REST({ version: '10' }).setToken(config.discord.token);
 
 const deploy = async () => {
 	try {
-		console.log('Starting deploying commands...')
+		logger.log('Starting deploying commands...')
 
-		await rest.put(Routes.applicationCommands(CLIENT_ID), {
+		await rest.put(Routes.applicationCommands(config.discord.clientId), {
 			body: commands.map(command => command.data)
 		})
 
-		console.log('Successfully deployed commands.')
+		logger.log('Successfully deployed commands.')
 	} catch (error) {
-		console.error(error)
+		if (error instanceof Error) {
+			logger.error(error.message)
+		}
 	}
 }
 

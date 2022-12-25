@@ -2,7 +2,9 @@
 
 ## Configuration
 
-Copy `src/config.json.tpl` and rename it to `config.json`. Set it with the correct values (find them on Discord API).
+Copy `src/config/config.json.tpl` and rename it to `config.json`. Set it with the correct values (find them on Discord API).
+
+Copy `src/config/characters.json.tpl` and rename it to `characters.json`. It will be used for jobs to get data about these characters.
 
 ## Run
 
@@ -15,3 +17,27 @@ Then, you can run the server with
 ```
 npm start
 ```
+
+## Discord commands
+
+### Ping
+
+Use `/ping` to make the bot respond with pong. Usefull to check if bot works.
+
+### Ilvl
+
+Use `/ilvl [realm] [character]` to get the ilvl of a given character in a given realm. You can also use `/ilvl all` to get the ilvl of all characters specified in `characters.json`.
+
+### Quests
+
+Use `/quests` to display all quests in common of all characters specified in `characters.json`.
+
+## Jobs
+
+### AchievementJob
+
+Every 10 seconds, this job gets the achievement list of all characters specified in `characters.json` and displays a message in all channels specified in `config.json`
+
+### DurabilityJob
+
+Every minutes, this job finds all broken equipped items (or broken soon) of all characters specified in `characters.json` and displays a warning message in all channels specified in `config.json`

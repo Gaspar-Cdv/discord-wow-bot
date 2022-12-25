@@ -1,32 +1,34 @@
-import { CacheType, ChatInputCommandInteraction, Client, GatewayIntentBits } from 'discord.js'
+import { Client, GatewayIntentBits } from 'discord.js'
 import commands from './commands/commands'
-import { BOT_TOKEN } from './config.json'
+import config from './config/config.json'
+import { achievementJob } from './jobs/achievementJob'
+import { durabilityJob } from './jobs/durabilityJob'
+import { logger } from './services/logger'
 
 const discord = new Client({
 	intents: [GatewayIntentBits.Guilds]
 })
 
 discord.on('ready', client => {
-	console.log(`Logged in as ${client.user.username}`)
+	logger.info(`Logged in as ${client.user.username}.`)
+
+	achievementJob.start(client)
+	durabilityJob.start(client)
 })
-
-const execute = async (interaction: ChatInputCommandInteraction<CacheType>) => {
-	const command = commands.find(command => command.data.name === interaction.commandName)
-
-	if (command == null) {
-		console.error(`Command name ${interaction.commandName} was not found`)
-		return
-	}
-
-	await command.execute(interaction)
-}
 
 discord.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) {
 		return
 	}
 
-	await execute(interaction)
+	const command = commands.find(command => command.data.name === interaction.commandName)
+
+	if (command == null) {
+		logger.error(`Command name ${interaction.commandName} was not found.`)
+		return
+	}
+
+	await command.execute(interaction)
 })
 
-discord.login(BOT_TOKEN)
+discord.login(config.discord.token)
