@@ -2,25 +2,39 @@ import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
 import allCharacters from '../../config/characters.json'
 
+interface Character {
+	name: string
+	realm: string
+	ilvl?: number
+}
+
+/**
+ * Comparator callback to sort characters by ilvl desc (with characters not found at the end).
+ */
+const byIlvlDesc = (a: Character, b: Character): number => {
+	return (b.ilvl ?? -1) - (a.ilvl ?? -1)
+}
+
 const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const subCommand = interaction.options.getSubcommand(true) // can be a realm or 'all'
 
-	const characters = subCommand === 'all'
+	const characters: Character[] = subCommand === 'all'
 		? allCharacters
 		: [{
 			name: interaction.options.getString('character', true),
 			realm: subCommand
 		}]
 
-	let messages: string[] = []
-	for (let i = 0; i < characters.length; i++) {
-		const character = await blizzardAPIService.getCharacter(characters[i].realm, characters[i].name)
-		if (character != null) {
-			messages.push(`ilvl for ${characters[i].name} : ${character.equipped_item_level}`)
-		} else {
-			messages.push(`${characters[i].name} was not found in ${characters[i].realm}`)
-		}
-	}
+	await Promise.all(characters.map(async (character) => {
+		const response = await blizzardAPIService.getCharacter(character.realm, character.name)
+		character.ilvl = response?.equipped_item_level
+	}))
+
+	const messages: string[] = characters.sort(byIlvlDesc)
+		.map(({ name, realm, ilvl }) => ilvl != null
+			? `ilvl for ${name} : ${ilvl}`
+			: `${name} was not found in ${realm}`
+		)
 
 	if (messages.length > 0) {
 		await interaction.reply(messages.join('\n'))
