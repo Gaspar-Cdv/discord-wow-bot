@@ -1,8 +1,8 @@
 {
-  "name": "discord",
+  "name": "discord-wow-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
     "deploy-commands": "ts-node src/commands/deploy-commands.ts",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gaspar-Cdv/discord-bot.git"
+    "url": "git+https://github.com/Gaspar-Cdv/discord-wow-bot.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gaspar-Cdv/discord-bot/issues"
+    "url": "https://github.com/Gaspar-Cdv/discord-wow-bot/issues"
   },
-  "homepage": "https://github.com/Gaspar-Cdv/discord-bot#readme",
+  "homepage": "https://github.com/Gaspar-Cdv/discord-wow-bot#readme",
   "dependencies": {
     "axios": "^1.2.1",
     "discord.js": "^14.7.1",
