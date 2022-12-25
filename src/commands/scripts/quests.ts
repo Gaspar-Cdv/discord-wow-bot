@@ -2,8 +2,7 @@ import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
 import characters from '../../config/characters.json'
 import { logger } from '../../services/logger'
-
-const MAX_MESSAGE_LENGTH = 2000
+import { interactionService } from '../../services/interaction'
 
 interface Quest {
 	name: string
@@ -81,24 +80,6 @@ const getQuestMessage = (quest: Quest): string => {
 	return questMessage.join('\n')
 }
 
-const getAllMessages = (quests: Quest[]): string[] => {
-	const messages: string[] = [] // list of all discord messages
-	let message: string[] = [] // current message being created
-
-	quests.forEach(quest => {
-		const questMessage = getQuestMessage(quest)
-
-		if (message.join('\n').length + questMessage.length > MAX_MESSAGE_LENGTH) {
-			messages.push(message.join('\n'))
-			message = []
-		}
-
-		message.push(questMessage)
-	})
-
-	return messages.concat(message.join('\n'))
-}
-
 const quests = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	if (characters.length === 0) {
 		interaction.reply('No character was found.')
@@ -108,7 +89,7 @@ const quests = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const time = Date.now()
 	const allQuests = await getAllQuests()
 
-	const messages = getAllMessages(allQuests)
+	const messages = interactionService.getAllMessages(allQuests, getQuestMessage)
 	logger.info(`Quests command completed in ${(Date.now() - time) / 1000}s`)
 
 	await interaction.reply('Quests list')

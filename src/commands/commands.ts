@@ -11,24 +11,6 @@ interface Command {
 	execute: (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>
 }
 
-export interface Character {
-	name: string
-	realm: string
-}
-
-/**
- * Get the character specified by the user in a 'CharacterOption' command, or all users if needed.
- */
-export const getCharacters = (interaction: ChatInputCommandInteraction<CacheType>): Character[] => {
-	const subCommand = interaction.options.getSubcommand(true) // can be a realm or 'all'
-	return subCommand === 'all'
-		? allCharacters
-		: [{
-			name: interaction.options.getString('character', true),
-			realm: subCommand
-		}]
-}
-
 /**
  * Create sub commands of a command to select one character, or all. E.g.\
  * `/command [realm] [character]` or\

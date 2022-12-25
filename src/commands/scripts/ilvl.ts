@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
-import { Character, getCharacters } from '../commands'
+import { Character, interactionService } from '../../services/interaction'
 
 interface CharacterIlvl extends Character {
 	ilvl?: number
@@ -14,7 +14,7 @@ const populateIlvl = async (characters: CharacterIlvl[]) => {
 }
 
 const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
-	const characters: CharacterIlvl[] = getCharacters(interaction)
+	const characters: CharacterIlvl[] = interactionService.getCharacters(interaction)
 	await populateIlvl(characters)
 
 	const messages: string[] = characters
