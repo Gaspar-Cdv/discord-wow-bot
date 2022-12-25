@@ -1,32 +1,26 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
-import { getCharacters } from '../commands'
+import { Character, getCharacters } from '../commands'
 
-interface Character {
-	name: string
-	realm: string
+interface CharacterIlvl extends Character {
 	ilvl?: number
 }
 
-/**
- * Comparator callback to sort characters by ilvl desc (with characters not found at the end).
- */
-const byIlvlDesc = (a: Character, b: Character): number => {
-	return (b.ilvl ?? -1) - (a.ilvl ?? -1)
-}
-
-const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
-	const characters: Character[] = getCharacters(interaction)
-
+const populateIlvl = async (characters: CharacterIlvl[]) => {
 	await Promise.all(characters.map(async (character) => {
 		const response = await blizzardAPIService.getCharacter(character.realm, character.name)
 		character.ilvl = response?.equipped_item_level
 	}))
+}
 
-	const messages: string[] = characters.sort(byIlvlDesc)
-		.map(({ name, realm, ilvl }) => ilvl != null
-			? `ilvl for ${name} : ${ilvl}`
-			: `${name} was not found in ${realm}`
+const ilvl = async (interaction: ChatInputCommandInteraction<CacheType>) => {
+	const characters: CharacterIlvl[] = getCharacters(interaction)
+	await populateIlvl(characters)
+
+	const messages: string[] = characters
+		.filter(character => character.ilvl != null)
+		.sort((a, b) => b.ilvl! - a.ilvl!)
+		.map(({ name, ilvl }) => `The ilvl of \`${name}\` is **${ilvl}**`
 		)
 
 	if (messages.length > 0) {
