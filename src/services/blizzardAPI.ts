@@ -9,6 +9,7 @@ import { CharacterQuestsAPIResponse } from '../types/blizzard/character/quests'
 import { CharacterQuestsCompletedAPIResponse } from '../types/blizzard/character/questsCompleted'
 import { CharacterStatisticsAPIResponse } from '../types/blizzard/character/statistics'
 import { CharacterStatusAPIResponse } from '../types/blizzard/character/status'
+import { logger } from './logger'
 
 type Namespace = 'profile-eu' | 'static-eu' | 'dynamic-eu'
 
@@ -79,7 +80,7 @@ class BlizzardAPIService {
 			return data
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				console.error(`Error while fetching blizzard API at ${url.toString()} (${error.message})`)
+				logger.error(`Error while fetching blizzard API at ${url.toString()} (${error.message})`)
 				return
 			}
 
@@ -89,7 +90,7 @@ class BlizzardAPIService {
 
 	private getAccessToken = async () => {
 		if (this.shouldRegenerateToken()) {
-			console.info(`Blizzard access token is not set or has expired. Fetching ${this.ACCESS_TOKEN_URL}...`)
+			logger.info(`Blizzard access token is not set or has expired. Fetching ${this.ACCESS_TOKEN_URL}...`)
 
 			const body = new FormData()
 			body.append('grant_type', 'client_credentials')
@@ -105,12 +106,12 @@ class BlizzardAPIService {
 
 					this.tokenExpirationTime = Date.now() + data.expires_in * 1000
 
-					console.info('Blizzard access token was successfully generated.')
+					logger.info('Blizzard access token was successfully generated.')
 
 					resolve(data.access_token)
 				} catch (error) {
 					if (error instanceof AxiosError) {
-						console.error(`Error while fetching blizzard API at ${this.ACCESS_TOKEN_URL} (${error.message})`)
+						logger.error(`Error while fetching blizzard API at ${this.ACCESS_TOKEN_URL} (${error.message})`)
 						reject()
 					}
 

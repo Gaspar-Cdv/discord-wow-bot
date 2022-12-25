@@ -3,13 +3,14 @@ import commands from './commands/commands'
 import config from './config/config.json'
 import { achievementJob } from './jobs/achievementJob'
 import { durabilityJob } from './jobs/durabilityJob'
+import { logger } from './services/logger'
 
 const discord = new Client({
 	intents: [GatewayIntentBits.Guilds]
 })
 
 discord.on('ready', client => {
-	console.info(`Logged in as ${client.user.username}.`)
+	logger.info(`Logged in as ${client.user.username}.`)
 
 	achievementJob.start(client)
 	durabilityJob.start(client)
@@ -23,7 +24,7 @@ discord.on('interactionCreate', async interaction => {
 	const command = commands.find(command => command.data.name === interaction.commandName)
 
 	if (command == null) {
-		console.error(`Command name ${interaction.commandName} was not found.`)
+		logger.error(`Command name ${interaction.commandName} was not found.`)
 		return
 	}
 

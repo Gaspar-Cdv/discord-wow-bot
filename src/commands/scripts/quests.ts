@@ -1,6 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
 import characters from '../../config/characters.json'
+import { logger } from '../../services/logger'
 
 const MAX_MESSAGE_LENGTH = 2000
 
@@ -108,7 +109,7 @@ const quests = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const allQuests = await getAllQuests()
 
 	const messages = getAllMessages(allQuests)
-	console.info(`Quests command completed in ${(Date.now() - time) / 1000}s`)
+	logger.info(`Quests command completed in ${(Date.now() - time) / 1000}s`)
 
 	await interaction.reply('Quests list')
 	for (const message of messages) {
