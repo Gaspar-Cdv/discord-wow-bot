@@ -27,7 +27,7 @@ const populateQuestsInProgress = async (allQuests: Record<number, Quest>): Promi
 				}
 			}
 
-			allQuests[quest.id].inProgress.push(character.name)
+			allQuests[quest.id].inProgress.push(`\`${character.name}\``)
 		})
 	}))
 }
@@ -44,7 +44,7 @@ const populateQuestsCompleted = async (allQuests: Record<number, Quest>): Promis
 			.map(quest => parseInt(quest))
 			.forEach(questId => {
 				if (questsCompleted.quests.some(quest => quest.id === questId)) {
-					allQuests[questId].completed.push(character.name)
+					allQuests[questId].completed.push(`\`${character.name}\``)
 				}
 			})
 	}))

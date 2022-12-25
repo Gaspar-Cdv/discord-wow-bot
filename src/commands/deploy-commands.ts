@@ -7,13 +7,13 @@ const rest = new REST({ version: '10' }).setToken(config.discord.token);
 
 const deploy = async () => {
 	try {
-		logger.log('Starting deploying commands...')
+		logger.info('Starting deploying commands...')
 
 		await rest.put(Routes.applicationCommands(config.discord.clientId), {
 			body: commands.map(command => command.data)
 		})
 
-		logger.log('Successfully deployed commands.')
+		logger.info('Successfully deployed commands.')
 	} catch (error) {
 		if (error instanceof Error) {
 			logger.error(error.message)

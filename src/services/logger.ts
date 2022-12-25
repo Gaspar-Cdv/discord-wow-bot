@@ -8,11 +8,11 @@ const createLogger = (level: Level) => {
 	}
 }
 
-class Logger {
+class LoggerService {
 	log = createLogger('log')
 	info = createLogger('info')
 	warn = createLogger('warn')
 	error = createLogger('error')
 }
 
-export const logger = new Logger()
+export const logger = new LoggerService()
