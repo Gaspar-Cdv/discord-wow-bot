@@ -70,7 +70,7 @@ class BlizzardAPIService {
 
 	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {
 		const url = new URL(path, this.API_BASE_URL)
-		url.searchParams.append('locale', 'fr_FR')
+		url.searchParams.append('locale', config.blizzard.locale)
 
 		try {
 			const accessToken = await this.getAccessToken()
