@@ -7,6 +7,7 @@ import { CharacterAPIResponse } from '../types/blizzard/character/character'
 import { CharacterEquipmentAPIResponse } from '../types/blizzard/character/equipment'
 import { CharacterQuestsAPIResponse } from '../types/blizzard/character/quests'
 import { CharacterQuestsCompletedAPIResponse } from '../types/blizzard/character/questsCompleted'
+import { CharacterReputationsAPIResponse } from '../types/blizzard/character/reputations'
 import { CharacterStatisticsAPIResponse } from '../types/blizzard/character/statistics'
 import { CharacterStatusAPIResponse } from '../types/blizzard/character/status'
 import { logger } from './logger'
@@ -61,6 +62,10 @@ class BlizzardAPIService {
 
 	getStatus = async (realm: string, character: string): Promise<CharacterStatusAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'status')
+	}
+
+	getReputations = async (realm: string, character: string): Promise<CharacterReputationsAPIResponse | undefined> => {
+		return this.getCharacter(realm, character, 'reputations')
 	}
 
 	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {

@@ -2,7 +2,7 @@ import { CacheType, ChatInputCommandInteraction, RESTPostAPIChatInputApplication
 import ping from './scripts/ping'
 import ilvl from './scripts/ilvl'
 import quests from './scripts/quests'
-import allCharacters from '../config/characters.json'
+import renown from './scripts/renown'
 
 const REALMS = ['dalaran', 'varimathras']
 
@@ -59,6 +59,14 @@ const commands: Command[] = [
 			options: createCharacterOptions()
 		},
 		execute: ilvl
+	},
+	{
+		data: {
+			name: 'renown',
+			description: 'Get the renown of a character',
+			options: createCharacterOptions()
+		},
+		execute: renown
 	}
 ]
 
