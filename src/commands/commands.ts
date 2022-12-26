@@ -3,6 +3,7 @@ import ping from './scripts/ping'
 import ilvl from './scripts/ilvl'
 import quests from './scripts/quests'
 import renown from './scripts/renown'
+import help from './scripts/help'
 
 const REALMS = ['dalaran', 'varimathras']
 
@@ -44,6 +45,13 @@ const commands: Command[] = [
 			description: 'Respond with pong',
 		},
 		execute: ping
+	},
+	{
+		data: {
+			name: 'help',
+			description: 'Get help about wow-bot',
+		},
+		execute: help
 	},
 	{
 		data: {

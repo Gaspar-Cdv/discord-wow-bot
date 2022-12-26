@@ -24,6 +24,10 @@ npm start
 
 Use `/ping` to make the bot respond with pong. Usefull to check if bot works.
 
+### Help
+
+Use `/help` to get a list of all commands in wow-bot.
+
 ### Ilvl
 
 Use `/ilvl [realm] [character]` to get the ilvl of a given character in a given realm. You can also use `/ilvl all` to get the ilvl of all characters specified in `characters.json`.
