@@ -5,6 +5,7 @@ import { CharacterAchievementsAPIResponse } from '../types/blizzard/character/ac
 import { CharacterAchievementsStatisticsAPIResponse } from '../types/blizzard/character/achievementsStatistics'
 import { CharacterAPIResponse } from '../types/blizzard/character/character'
 import { CharacterEquipmentAPIResponse } from '../types/blizzard/character/equipment'
+import { CharacterMediaAPIResponse } from '../types/blizzard/character/media'
 import { CharacterQuestsAPIResponse } from '../types/blizzard/character/quests'
 import { CharacterQuestsCompletedAPIResponse } from '../types/blizzard/character/questsCompleted'
 import { CharacterReputationsAPIResponse } from '../types/blizzard/character/reputations'
@@ -66,6 +67,10 @@ class BlizzardAPIService {
 
 	getReputations = async (realm: string, character: string): Promise<CharacterReputationsAPIResponse | undefined> => {
 		return this.getCharacter(realm, character, 'reputations')
+	}
+
+	getCharacterMedia = async (realm: string, character: string): Promise<CharacterMediaAPIResponse | undefined> => {
+		return this.getCharacter(realm, character, 'character-media')
 	}
 
 	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {

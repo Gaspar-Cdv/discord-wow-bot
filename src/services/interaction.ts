@@ -30,6 +30,10 @@ class InteractionService {
 		return messages.concat(message.join('\n\n'))
 	}
 
+	getCharacter = (interaction: ChatInputCommandInteraction<CacheType>): Character => {
+		return this.getCharacters(interaction)[0]
+	}
+
 	/**
 	 * Get the character specified by the user in a 'CharacterOption' command, or all users if needed.
 	 */

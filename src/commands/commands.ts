@@ -4,6 +4,7 @@ import ilvl from './scripts/ilvl'
 import quests from './scripts/quests'
 import renown from './scripts/renown'
 import help from './scripts/help'
+import selfie from './scripts/selfie'
 
 const REALMS = ['dalaran', 'varimathras']
 
@@ -18,12 +19,12 @@ interface Command {
  * `/command all`
  * @param name The name of the command, used in description (e.g. "Get the [name] of all characters")
  */
-const createCharacterOptions = (name: string): APIApplicationCommandOption[] => [
-	{
+const createCharacterOptions = (name: string, includeAll = true): APIApplicationCommandOption[] => [
+	...(includeAll ? [{
 		name: 'all',
 		description: `Get the ${name} for all characters`,
-		type: ApplicationCommandOptionType.Subcommand
-	},
+		type: ApplicationCommandOptionType.Subcommand.valueOf()
+	}] : []),
 	...REALMS.map(realm => ({
 		name: realm,
 		description: `Get the ${name} of a character in ${realm}`,
@@ -53,6 +54,14 @@ const commands: Command[] = [
 			description: 'Get help about wow-bot',
 		},
 		execute: help
+	},
+	{
+		data: {
+			name: 'selfie',
+			description: 'Get a selfie of a character',
+			options: createCharacterOptions('selfie', false)
+		},
+		execute: selfie
 	},
 	{
 		data: {
