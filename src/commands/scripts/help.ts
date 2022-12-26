@@ -8,6 +8,7 @@ const help = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 		'- `/renown [realm] [character]`: get the renown of a specific character.',
 		'- `/renown all`: get the renown of all users registred in the server.',
 		'- `/quests`: get a list of quests in common to all users registred in the server.',
+		'- `/selfie [realm] [character]`: get a selfie of a specific character.',
 	]
 	await interaction.reply(messages.join('\n'))
 }
