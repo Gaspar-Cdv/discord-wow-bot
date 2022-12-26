@@ -14,7 +14,7 @@ export class AchievementJob extends TextChannelJob {
 				return
 			}
 
-			const recentEvents = achievements.recent_events.filter(event => now - event.timestamp < this.interval * 1.5)
+			const recentEvents = achievements.recent_events.filter(event => now - event.timestamp < this.interval * 1500)
 			await Promise.all(recentEvents.map(async (event) => {
 				await this.sendToAllChannels(`Congratulations ${character.name} for the "${event.achievement.name}" achievement!`)
 			}))
