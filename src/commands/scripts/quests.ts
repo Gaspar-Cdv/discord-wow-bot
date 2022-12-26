@@ -58,13 +58,20 @@ const byNumberOfCharactersInvolved = (a: Quest, b: Quest) => {
 	return b.inProgress.length - a.inProgress.length || a.completed.length - b.completed.length
 }
 
+/**
+ * Filter callback to remove quests in progress for only one character and not completed by anybody else
+ */
+const soloQuests = (quest: Quest) => {
+	return quest.inProgress.length > 1 || quest.completed.length > 0
+}
+
 const getAllQuests = async (): Promise<Quest[]> => {
 	const allQuests: Record<number, Quest> = {}
 
 	await populateQuestsInProgress(allQuests)
 	await populateQuestsCompleted(allQuests)
 
-	return Object.values(allQuests).sort(byNumberOfCharactersInvolved)
+	return Object.values(allQuests).filter(soloQuests).sort(byNumberOfCharactersInvolved)
 }
 
 const getQuestMessage = (quest: Quest): string => {
