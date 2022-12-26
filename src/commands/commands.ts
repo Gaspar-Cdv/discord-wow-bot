@@ -16,16 +16,17 @@ interface Command {
  * Create sub commands of a command to select one character, or all. E.g.\
  * `/command [realm] [character]` or\
  * `/command all`
+ * @param name The name of the command, used in description (e.g. "Get the [name] of all characters")
  */
-const createCharacterOptions = (): APIApplicationCommandOption[] => [
+const createCharacterOptions = (name: string): APIApplicationCommandOption[] => [
 	{
 		name: 'all',
-		description: 'All characters',
+		description: `Get the ${name} for all characters`,
 		type: ApplicationCommandOptionType.Subcommand
 	},
 	...REALMS.map(realm => ({
 		name: realm,
-		description: 'The name of the realm',
+		description: `Get the ${name} of a character in ${realm}`,
 		type: ApplicationCommandOptionType.Subcommand.valueOf(),
 		options: [
 			{
@@ -64,7 +65,7 @@ const commands: Command[] = [
 		data: {
 			name: 'ilvl',
 			description: 'Get the ilvl of a character',
-			options: createCharacterOptions()
+			options: createCharacterOptions('ilvl')
 		},
 		execute: ilvl
 	},
@@ -72,7 +73,7 @@ const commands: Command[] = [
 		data: {
 			name: 'renown',
 			description: 'Get the renown of a character',
-			options: createCharacterOptions()
+			options: createCharacterOptions('renown')
 		},
 		execute: renown
 	}
