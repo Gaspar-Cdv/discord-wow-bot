@@ -14,6 +14,9 @@ const parseDurability = (displayString: string): [current: number, max: number] 
 	return [current, max]
 }
 
+/**
+ * @deprecated Unfortunately, since the WoW API isn't updated in real time, this job should not be used anymore
+ */
 export class DurabilityJob extends TextChannelJob {
 	protected override interval = 60
 

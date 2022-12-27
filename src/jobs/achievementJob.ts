@@ -2,6 +2,9 @@ import { blizzardAPIService } from '../services/blizzardAPI'
 import { TextChannelJob } from './textChannelJob'
 import characters from '../config/characters.json'
 
+/**
+ * @deprecated Unfortunately, since the WoW API isn't updated in real time, this job should not be used anymore
+ */
 export class AchievementJob extends TextChannelJob {
 	protected override interval = 10
 

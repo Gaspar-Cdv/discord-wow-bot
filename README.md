@@ -42,10 +42,12 @@ Use `/quests` to display all quests in common of all characters specified in `ch
 
 ## Jobs
 
-### AchievementJob
+### AchievementJob (deprecated)
 
-Every 10 seconds, this job gets the achievement list of all characters specified in `characters.json` and displays a message in all channels specified in `config.json`
+Every 10 seconds, this job gets the achievement list of all characters specified in `characters.json` and displays a message in all channels specified in `config.json`.\
+Unfortunately, since the WoW API isn't updated in real time, this job should not be used anymore.
 
-### DurabilityJob
+### DurabilityJob (deprecated)
 
-Every minutes, this job finds all broken equipped items (or broken soon) of all characters specified in `characters.json` and displays a warning message in all channels specified in `config.json`
+Every minutes, this job finds all broken equipped items (or broken soon) of all characters specified in `characters.json` and displays a warning message in all channels specified in `config.json`.\
+Unfortunately, since the WoW API isn't updated in real time, this job should not be used anymore.
