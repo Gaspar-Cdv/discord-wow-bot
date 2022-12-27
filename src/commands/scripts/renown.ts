@@ -23,7 +23,7 @@ const toRenown = ({ faction, standing }: Reputation<string>): Renown => {
 	}
 }
 
-const populateReputations = async (characters: CharacterReputation[]) => {
+const populateRenowns = async (characters: CharacterReputation[]) => {
 	await Promise.all(characters.map(async (character) => {
 		const response = await blizzardAPIService.getReputations(character.realm, character.name)
 
@@ -33,7 +33,7 @@ const populateReputations = async (characters: CharacterReputation[]) => {
 	}))
 }
 
-const getReputationMessage = ({ name, renowns: reputations }: CharacterReputation) => {
+const getRenownMessage = ({ name, renowns: reputations }: CharacterReputation) => {
 	const messageTitle = `**${name}**`
 	const messageBody = reputations!
 		.sort((a, b) => b.level - a.level || b.value - a.value)
@@ -44,11 +44,11 @@ const getReputationMessage = ({ name, renowns: reputations }: CharacterReputatio
 
 const renown = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const characters: CharacterReputation[] = interactionService.getCharacters(interaction)
-	await populateReputations(characters)
+	await populateRenowns(characters)
 
 	const messages: string[] = characters
-		.filter(character => character.renowns != null)
-		.map(getReputationMessage)
+		.filter(character => character.renowns != null && character.renowns.length > 0)
+		.map(getRenownMessage)
 
 	if (messages.length > 0) {
 		await interaction.reply(messages.join('\n\n'))

@@ -18,7 +18,7 @@ const populateQuestsInProgress = async (allQuests: Record<number, Quest>): Promi
 			return
 		}
 
-		quests.in_progress.forEach(quest => {
+		quests.in_progress?.forEach(quest => {
 			if (allQuests[quest.id] == null) {
 				allQuests[quest.id] = {
 					name: quest.name,
