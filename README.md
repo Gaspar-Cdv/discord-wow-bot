@@ -4,7 +4,9 @@
 
 Copy `src/config/config.json.tpl` and rename it to `config.json`. Set it with the correct values (find them on Discord API).
 
-Copy `src/config/characters.json.tpl` and rename it to `characters.json`. It will be used for jobs to get data about these characters.
+Copy `src/config/characters.json.tpl` and rename it to `characters.json`. It will be used for some commands to get data about these characters.
+
+Copy `src/config/realms.json.tpl` and rename it to `realms.json`. It will be used for some subcommands to choose for which realm you want to execute the command.
 
 ## Run
 

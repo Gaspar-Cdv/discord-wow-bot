@@ -1,0 +1,4 @@
+[
+	"dalaran",
+	"varimathras"
+]

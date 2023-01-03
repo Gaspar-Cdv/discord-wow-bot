@@ -5,8 +5,7 @@ import quests from './scripts/quests'
 import renown from './scripts/renown'
 import help from './scripts/help'
 import selfie from './scripts/selfie'
-
-const REALMS = ['dalaran', 'varimathras']
+import realms from '../config/realms.json'
 
 interface Command {
 	data: RESTPostAPIChatInputApplicationCommandsJSONBody
@@ -25,7 +24,7 @@ const createCharacterOptions = (name: string, includeAll = true): APIApplication
 		description: `Get the ${name} for all characters`,
 		type: ApplicationCommandOptionType.Subcommand.valueOf()
 	}] : []),
-	...REALMS.map(realm => ({
+	...realms.map(realm => ({
 		name: realm,
 		description: `Get the ${name} of a character in ${realm}`,
 		type: ApplicationCommandOptionType.Subcommand.valueOf(),
