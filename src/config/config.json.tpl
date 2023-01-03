@@ -6,6 +6,7 @@
 	},
 	"blizzard": {
 		"clientId": "",
-		"secret": ""
+		"secret": "",
+		"locale": "en_US"
 	}
 }

@@ -14,13 +14,16 @@ const parseDurability = (displayString: string): [current: number, max: number] 
 	return [current, max]
 }
 
+/**
+ * @deprecated Unfortunately, since the WoW API isn't updated in real time, this job should not be used anymore
+ */
 export class DurabilityJob extends TextChannelJob {
 	protected override interval = 60
 
-	protected override callback = () => {
+	protected override callback = async () => {
 		const brokenItems: BrokenItem[] = []
 
-		Promise.all(characters.map(async (character) => {
+		await Promise.all(characters.map(async (character) => {
 			const equipment = await blizzardAPIService.getEquipment(character.realm, character.name)
 
 			if (equipment == null) {
@@ -40,15 +43,16 @@ export class DurabilityJob extends TextChannelJob {
 					}
 				}
 			})
-
-			await Promise.all(brokenItems.map(async (item) => {
-				if (item.current === 0) {
-					this.sendToAllChannels(`Alert ${item.characterName}, your "${item.itemName} is broken!`)
-				} else {
-					this.sendToAllChannels(`Be careful ${item.characterName}, your "${item.itemName} is broken soon (${item.current}/${item.max})."`)
-				}
-			}))
 		}))
+
+		await Promise.all(brokenItems.map(async (item) => {
+			if (item.current === 0) {
+				this.sendToAllChannels(`Alert ${item.characterName}, your "${item.itemName} is broken!`)
+			} else {
+				this.sendToAllChannels(`Be careful ${item.characterName}, your "${item.itemName} is broken soon" (${item.current}/${item.max}).`)
+			}
+		}))
+
 	}
 }
 

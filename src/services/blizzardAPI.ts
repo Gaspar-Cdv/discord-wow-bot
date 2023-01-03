@@ -5,8 +5,10 @@ import { CharacterAchievementsAPIResponse } from '../types/blizzard/character/ac
 import { CharacterAchievementsStatisticsAPIResponse } from '../types/blizzard/character/achievementsStatistics'
 import { CharacterAPIResponse } from '../types/blizzard/character/character'
 import { CharacterEquipmentAPIResponse } from '../types/blizzard/character/equipment'
+import { CharacterMediaAPIResponse } from '../types/blizzard/character/media'
 import { CharacterQuestsAPIResponse } from '../types/blizzard/character/quests'
 import { CharacterQuestsCompletedAPIResponse } from '../types/blizzard/character/questsCompleted'
+import { CharacterReputationsAPIResponse } from '../types/blizzard/character/reputations'
 import { CharacterStatisticsAPIResponse } from '../types/blizzard/character/statistics'
 import { CharacterStatusAPIResponse } from '../types/blizzard/character/status'
 import { logger } from './logger'
@@ -63,9 +65,17 @@ class BlizzardAPIService {
 		return this.getCharacter(realm, character, 'status')
 	}
 
+	getReputations = async (realm: string, character: string): Promise<CharacterReputationsAPIResponse | undefined> => {
+		return this.getCharacter(realm, character, 'reputations')
+	}
+
+	getCharacterMedia = async (realm: string, character: string): Promise<CharacterMediaAPIResponse | undefined> => {
+		return this.getCharacter(realm, character, 'character-media')
+	}
+
 	private fetchBlizzardApi = async <T = any> (path: string, namespace: Namespace = 'profile-eu'): Promise<T | undefined> => {
 		const url = new URL(path, this.API_BASE_URL)
-		url.searchParams.append('locale', 'fr_FR')
+		url.searchParams.append('locale', config.blizzard.locale)
 
 		try {
 			const accessToken = await this.getAccessToken()

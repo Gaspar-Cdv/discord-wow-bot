@@ -2,8 +2,7 @@ import { CacheType, ChatInputCommandInteraction } from 'discord.js'
 import { blizzardAPIService } from '../../services/blizzardAPI'
 import characters from '../../config/characters.json'
 import { logger } from '../../services/logger'
-
-const MAX_MESSAGE_LENGTH = 2000
+import { interactionService } from '../../services/interaction'
 
 interface Quest {
 	name: string
@@ -19,7 +18,7 @@ const populateQuestsInProgress = async (allQuests: Record<number, Quest>): Promi
 			return
 		}
 
-		quests.in_progress.forEach(quest => {
+		quests.in_progress?.forEach(quest => {
 			if (allQuests[quest.id] == null) {
 				allQuests[quest.id] = {
 					name: quest.name,
@@ -28,7 +27,7 @@ const populateQuestsInProgress = async (allQuests: Record<number, Quest>): Promi
 				}
 			}
 
-			allQuests[quest.id].inProgress.push(character.name)
+			allQuests[quest.id].inProgress.push(`\`${character.name}\``)
 		})
 	}))
 }
@@ -45,7 +44,7 @@ const populateQuestsCompleted = async (allQuests: Record<number, Quest>): Promis
 			.map(quest => parseInt(quest))
 			.forEach(questId => {
 				if (questsCompleted.quests.some(quest => quest.id === questId)) {
-					allQuests[questId].completed.push(character.name)
+					allQuests[questId].completed.push(`\`${character.name}\``)
 				}
 			})
 	}))
@@ -59,13 +58,20 @@ const byNumberOfCharactersInvolved = (a: Quest, b: Quest) => {
 	return b.inProgress.length - a.inProgress.length || a.completed.length - b.completed.length
 }
 
+/**
+ * Filter callback to remove quests in progress for only one character and not completed by anybody else
+ */
+const soloQuests = (quest: Quest) => {
+	return quest.inProgress.length > 1 || quest.completed.length > 0
+}
+
 const getAllQuests = async (): Promise<Quest[]> => {
 	const allQuests: Record<number, Quest> = {}
 
 	await populateQuestsInProgress(allQuests)
 	await populateQuestsCompleted(allQuests)
 
-	return Object.values(allQuests).sort(byNumberOfCharactersInvolved)
+	return Object.values(allQuests).filter(soloQuests).sort(byNumberOfCharactersInvolved)
 }
 
 const getQuestMessage = (quest: Quest): string => {
@@ -81,24 +87,6 @@ const getQuestMessage = (quest: Quest): string => {
 	return questMessage.join('\n')
 }
 
-const getAllMessages = (quests: Quest[]): string[] => {
-	const messages: string[] = [] // list of all discord messages
-	let message: string[] = [] // current message being created
-
-	quests.forEach(quest => {
-		const questMessage = getQuestMessage(quest)
-
-		if (message.join('\n').length + questMessage.length > MAX_MESSAGE_LENGTH) {
-			messages.push(message.join('\n'))
-			message = []
-		}
-
-		message.push(questMessage)
-	})
-
-	return messages.concat(message.join('\n'))
-}
-
 const quests = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	if (characters.length === 0) {
 		interaction.reply('No character was found.')
@@ -108,7 +96,7 @@ const quests = async (interaction: ChatInputCommandInteraction<CacheType>) => {
 	const time = Date.now()
 	const allQuests = await getAllQuests()
 
-	const messages = getAllMessages(allQuests)
+	const messages = interactionService.getAllMessages(allQuests, getQuestMessage)
 	logger.info(`Quests command completed in ${(Date.now() - time) / 1000}s`)
 
 	await interaction.reply('Quests list')
